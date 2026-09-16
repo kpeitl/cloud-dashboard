@@ -14,9 +14,12 @@
   .how-to-read p{margin:0 0 6px}
   .how-to-read p:last-child{margin-bottom:0}
   .section-label{font-size:11px;font-weight:700;text-transform:uppercase;letter-spacing:.8px;color:#57606a;margin-bottom:10px}
-  .view-toggle{display:flex;gap:6px;margin-bottom:12px}
+  .view-toggle{display:flex;gap:6px;margin-bottom:8px;flex-wrap:wrap;align-items:center}
   .view-btn{padding:5px 14px;font-size:11px;font-weight:700;border-radius:5px;border:1px solid #e5e7eb;background:#f7f8fa;color:#57606a;cursor:pointer;transition:background .15s,color .15s}
   .view-btn.active{background:#1F4E79;color:#fff;border-color:#1F4E79}
+  .cohort-filters{display:flex;gap:6px;flex-wrap:wrap;margin-bottom:14px}
+  .cohort-filter-btn{padding:4px 12px;font-size:11px;font-weight:700;border-radius:5px;border:2px solid transparent;cursor:pointer;transition:opacity .15s,border-color .15s;color:#fff;opacity:.55}
+  .cohort-filter-btn.active{opacity:1;border-color:rgba(0,0,0,.25)}
   .cohort-group{margin-bottom:18px}
   .cohort-label{font-size:11px;font-weight:800;text-transform:uppercase;letter-spacing:.8px;padding:4px 10px;border-radius:4px;display:inline-block;margin-bottom:8px;color:#fff}
   .cards{display:grid;grid-template-columns:repeat(5,1fr);gap:10px;margin-bottom:16px}
@@ -87,7 +90,7 @@
 </head>
 <body>
 <h1>IBM Cloud Expenses Dashboard</h1>
-<p class="subtitle">All amounts in USD &middot; Updated on 16/09/2026 11:55</p>
+<p class="subtitle">All amounts in USD &middot; Updated on 16/09/2026 12:00</p>
 <div class="how-to-read">
   <strong>How to Read This Dashboard</strong>
   <p>Invoice amounts are billed based on usage from two months prior. For example, an invoice issued in August reflects consumption from June.</p>
@@ -98,6 +101,7 @@
   <button class="view-btn active" id="btnAll" onclick="setView('all')">All Projects</button>
   <button class="view-btn" id="btnCohort" onclick="setView('cohort')">Group by Cohort</button>
 </div>
+<div class="cohort-filters" id="cohortFilters" style="display:none"></div>
 <div id="creditCards"></div>
 <div class="charts-row">
   <div class="chart-panel">
@@ -141,7 +145,7 @@
     <table><thead><tr><th>Account</th><th>Dashboard Coverage</th></tr></thead><tbody id="apiTbody"></tbody></table>
   </div>
 </div>
-<footer>IBM Cloud Expenses &mdash; generated automatically on 16/09/2026 11:55</footer>
+<footer>IBM Cloud Expenses &mdash; generated automatically on 16/09/2026 12:00</footer>
 <script>
 const RAW={"Al Baha":[["Feb 2026",330.83],["Mar 2026",2939.32],["Apr 2026",2905.55],["May 2026",3002.41],["Jun 2026",2905.55],["Jul 2026",3002.41],["Aug 2026",3002.41],["Sep 2026",1071]],"C 40":[["Jul 2025",1319.65],["Aug 2025",1203.31],["Sep 2025",1195.35],["Oct 2025",1190.65],["Nov 2025",1307.66],["Dec 2025",4134.15],["Jan 2026",2264.16],["Feb 2026",2467.29],["Mar 2026",2806.42],["Apr 2026",2481.94],["May 2026",2510.58],["Jun 2026",2959.16],["Jul 2026",2981.25],["Aug 2026",2983.45],["Sep 2026",1113.24]],"Impact Accelerator":[["Jul 2025",794.24],["Aug 2025",3194.26],["Sep 2025",3819.75],["Oct 2025",21093.29],["Nov 2025",6842.95],["Dec 2025",4868.19],["Jan 2026",4422.69],["Feb 2026",5614.26],["Mar 2026",8325.54],["Apr 2026",8529.35],["May 2026",9322.77],["Jun 2026",9310.28],["Jul 2026",9905.43],["Aug 2026",9394.14],["Sep 2026",3822.93]],"Janaagraha":[["Jun 2025",248.47],["Jul 2025",1521.68],["Aug 2025",1951.35],["Sep 2025",1968.75],["Oct 2025",2004.7],["Nov 2025",1983.7],["Dec 2025",2359.32],["Jan 2026",2325.73],["Feb 2026",2277.88],["Mar 2026",2548.23],["Apr 2026",2631.41],["May 2026",2731.18],["Jun 2026",2110.84],["Jul 2026",2541.95],["Aug 2026",2322.92],["Sep 2026",744.7]],"Kota Kita":[["Apr 2025",678.41],["May 2025",3138.2],["Jun 2025",3512.24],["Jul 2025",3895.34],["Aug 2025",4139.46],["Sep 2025",2574.91],["Oct 2025",1981.28],["Nov 2025",2248.99],["Dec 2025",2110.38],["Jan 2026",3158.58],["Feb 2026",2931.12],["Mar 2026",3941.31],["Apr 2026",4081.33],["May 2026",4371.67],["Jun 2026",4948.38],["Jul 2026",5208.5],["Aug 2026",5193.19],["Sep 2026",2276.86]],"MGB":[["Jul 2025",1430.84],["Aug 2025",1302.33],["Sep 2025",1527.91],["Oct 2025",1538.19],["Nov 2025",1095.37],["Dec 2025",943.09],["Jan 2026",886.55],["Feb 2026",738.17],["Mar 2026",748.39],["Apr 2026",1131.39],["May 2026",959.32],["Jun 2026",1366.26],["Jul 2026",1399.45],["Aug 2026",1299.34],["Sep 2026",320.98]],"NLR Foundation":[["Feb 2026",1122.7],["Mar 2026",1528.77],["Apr 2026",2107.75],["May 2026",5680.66],["Jun 2026",2074.2],["Jul 2026",1978.9],["Aug 2026",2168.74],["Sep 2026",1075.44]],"Polytechnique":[["May 2026",438.91],["Jun 2026",803.58],["Jul 2026",901.41],["Aug 2026",1444.56],["Sep 2026",1140.81]],"SE for All":[["Jul 2025",4522.45],["Aug 2025",9258.73],["Sep 2025",3253.39],["Oct 2025",4201.24],["Nov 2025",6102.8],["Dec 2025",4062.31],["Jan 2026",2058.1],["Feb 2026",1922.12],["Mar 2026",2045.86],["Apr 2026",1504.13],["May 2026",1534.95],["Jun 2026",1494.72],["Jul 2026",1541.49],["Aug 2026",1262.75],["Sep 2026",558.23]],"U of Illinois":[["Apr 2025",12.39],["May 2025",9.71],["Jun 2025",15.65],["Jul 2025",362.19],["Aug 2025",1.04],["Sep 2025",1.04],["Oct 2025",1.04],["Nov 2025",1.04],["Dec 2025",1.04],["Jan 2026",11.9],["Feb 2026",10.75],["Mar 2026",11.9],["Apr 2026",11.51],["May 2026",11.83],["Jun 2026",11.45],["Jul 2026",11.83],["Aug 2026",11.83],["Sep 2026",3.43]],"U of Sharjah":[["Apr 2025",701.1],["May 2025",989.07],["Jun 2025",1085.56],["Jul 2025",1592.21],["Aug 2025",1381.54],["Sep 2025",1317.14],["Oct 2025",1072.95],["Nov 2025",602],["Dec 2025",537.26],["Jan 2026",599.18],["Feb 2026",551.89],["Mar 2026",583.2],["Apr 2026",579.74],["May 2026",594.26],["Jun 2026",579.8],["Jul 2026",593.96],["Aug 2026",593.59],["Sep 2026",186.64]],"UNIDO":[["Apr 2026",352.91],["May 2026",1014.29],["Jun 2026",1811.2],["Jul 2026",1926.71],["Aug 2026",1948.14],["Sep 2026",1104.59]],"WFP USA":[["Sep 2025",60.6],["Oct 2025",407.77],["Nov 2025",407.74],["Dec 2025",407.86],["Jan 2026",749.64],["Feb 2026",899.54],["Mar 2026",939.67],["Apr 2026",1118.38],["May 2026",3252.24],["Jun 2026",1004.7],["Jul 2026",1023.43],["Aug 2026",1476.47],["Sep 2026",745.63]],"WRI":[["Apr 2026",2.98],["May 2026",0.93],["Jun 2026",0.02],["Jul 2026",0.02],["Aug 2026",13.72],["Sep 2026",0.28]],"Yarandu":[["Apr 2025",2534.14],["May 2025",2932.16],["Jun 2025",2864.97],["Jul 2025",2439.16],["Aug 2025",2265.78],["Sep 2025",2187.59],["Oct 2025",1682.62],["Nov 2025",1709.13],["Dec 2025",1350.85],["Jan 2026",1382.88],["Feb 2026",1295.59],["Mar 2026",1337.27],["Apr 2026",1381.63],["May 2026",1411.98],["Jun 2026",1417.09],["Jul 2026",1425.36],["Aug 2026",1275.22],["Sep 2026",301.48]]};
 const CASHFLOW={"Al Baha":[["Apr 2026",330.83],["May 2026",2939.32],["Jun 2026",2905.55],["Jul 2026",3002.41],["Aug 2026",2905.55],["Sep 2026",3002.41],["Oct 2026",3002.41],["Nov 2026",1071]],"C 40":[["Sep 2025",1319.65],["Oct 2025",1203.31],["Nov 2025",1195.35],["Dec 2025",1190.65],["Jan 2026",1307.66],["Feb 2026",4134.15],["Mar 2026",2264.16],["Apr 2026",2467.29],["May 2026",2806.42],["Jun 2026",2481.94],["Jul 2026",2510.58],["Aug 2026",2959.16],["Sep 2026",2981.25],["Oct 2026",2983.45],["Nov 2026",1113.24]],"Impact Accelerator":[["Apr 2024",953.19],["May 2024",124.43],["Jun 2024",2.51],["Aug 2024",15.37],["Sep 2024",12.37],["Oct 2024",11.83],["Nov 2024",1.79],["Sep 2025",794.24],["Oct 2025",3194.26],["Nov 2025",3819.75],["Dec 2025",21093.29],["Jan 2026",6842.95],["Feb 2026",4868.19],["Mar 2026",4422.69],["Apr 2026",5614.26],["May 2026",8325.54],["Jun 2026",8529.35],["Jul 2026",9322.77],["Aug 2026",9310.28],["Sep 2026",9905.43],["Oct 2026",9394.14],["Nov 2026",3822.93]],"Janaagraha":[["Aug 2025",248.47],["Sep 2025",1521.68],["Oct 2025",1951.35],["Nov 2025",1968.75],["Dec 2025",2004.7],["Jan 2026",1983.7],["Feb 2026",2359.32],["Mar 2026",2325.73],["Apr 2026",2277.88],["May 2026",2548.23],["Jun 2026",2631.41],["Jul 2026",2731.18],["Aug 2026",2110.84],["Sep 2026",2541.95],["Oct 2026",2322.92],["Nov 2026",744.7]],"Kota Kita":[["Jun 2025",678.41],["Jul 2025",3138.2],["Aug 2025",3512.24],["Sep 2025",3895.34],["Oct 2025",4139.46],["Nov 2025",2574.91],["Dec 2025",1981.28],["Jan 2026",2248.99],["Feb 2026",2110.38],["Mar 2026",3158.58],["Apr 2026",2931.12],["May 2026",3941.31],["Jun 2026",4081.33],["Jul 2026",4371.67],["Aug 2026",4948.38],["Sep 2026",5208.5],["Oct 2026",5193.19],["Nov 2026",2276.86]],"MGB":[["Sep 2025",1430.84],["Oct 2025",1302.33],["Nov 2025",1527.91],["Dec 2025",1538.19],["Jan 2026",1095.37],["Feb 2026",943.09],["Mar 2026",886.55],["Apr 2026",738.17],["May 2026",748.39],["Jun 2026",1131.39],["Jul 2026",959.32],["Aug 2026",1366.26],["Sep 2026",1399.45],["Oct 2026",1299.34],["Nov 2026",320.98]],"NLR Foundation":[["Apr 2026",1122.7],["May 2026",1528.77],["Jun 2026",2107.75],["Jul 2026",5680.66],["Aug 2026",2074.2],["Sep 2026",1978.9],["Oct 2026",2168.74],["Nov 2026",1075.44]],"Polytechnique":[["Jul 2026",438.91],["Aug 2026",803.58],["Sep 2026",901.41],["Oct 2026",1444.56],["Nov 2026",1140.81]],"SE for All":[["Sep 2025",4522.45],["Oct 2025",9258.73],["Nov 2025",3253.39],["Dec 2025",4201.24],["Jan 2026",6102.8],["Feb 2026",4062.31],["Mar 2026",2058.1],["Apr 2026",1922.12],["May 2026",2045.86],["Jun 2026",1504.13],["Jul 2026",1534.95],["Aug 2026",1494.72],["Sep 2026",1541.49],["Oct 2026",1262.75],["Nov 2026",558.23]],"U of Illinois":[["Jul 2024",0.6],["Aug 2024",9.32],["Sep 2024",9.59],["Oct 2024",267.65],["Nov 2024",292.65],["Dec 2024",9.59],["Jan 2025",43.39],["Feb 2025",49.07],["Mar 2025",9.59],["Apr 2025",12.49],["May 2025",20.32],["Jun 2025",12.39],["Jul 2025",9.71],["Aug 2025",15.65],["Sep 2025",362.19],["Oct 2025",1.04],["Nov 2025",1.04],["Dec 2025",1.04],["Jan 2026",1.04],["Feb 2026",1.04],["Mar 2026",11.9],["Apr 2026",10.75],["May 2026",11.9],["Jun 2026",11.51],["Jul 2026",11.83],["Aug 2026",11.45],["Sep 2026",11.83],["Oct 2026",11.83],["Nov 2026",3.43]],"U of Sharjah":[["Sep 2024",1164.68],["Oct 2024",712.8],["Nov 2024",491.69],["Dec 2024",596.48],["Jan 2025",653.5],["Feb 2025",668.83],["Mar 2025",711.29],["Apr 2025",678.83],["May 2025",711.48],["Jun 2025",701.1],["Jul 2025",989.07],["Aug 2025",1085.56],["Sep 2025",1592.21],["Oct 2025",1381.54],["Nov 2025",1317.14],["Dec 2025",1072.95],["Jan 2026",602],["Feb 2026",537.26],["Mar 2026",599.18],["Apr 2026",551.89],["May 2026",583.2],["Jun 2026",579.74],["Jul 2026",594.26],["Aug 2026",579.8],["Sep 2026",593.96],["Oct 2026",593.59],["Nov 2026",186.64]],"UNIDO":[["Jun 2026",352.91],["Jul 2026",1014.29],["Aug 2026",1811.2],["Sep 2026",1926.71],["Oct 2026",1948.14],["Nov 2026",1104.59]],"WFP USA":[["Nov 2025",60.6],["Dec 2025",407.77],["Jan 2026",407.74],["Feb 2026",407.86],["Mar 2026",749.64],["Apr 2026",899.54],["May 2026",939.67],["Jun 2026",1118.38],["Jul 2026",3252.24],["Aug 2026",1004.7],["Sep 2026",1023.43],["Oct 2026",1476.47],["Nov 2026",745.63]],"WRI":[["Jun 2026",2.98],["Jul 2026",0.93],["Aug 2026",0.02],["Sep 2026",0.02],["Oct 2026",13.72],["Nov 2026",0.28]],"Yarandu":[["Apr 2024",55.75],["May 2024",253.52],["Jun 2024",1018.26],["Jul 2024",2070.14],["Aug 2024",2055.92],["Sep 2024",2303.51],["Oct 2024",2546.36],["Nov 2024",2497.9],["Dec 2024",2606.85],["Jan 2025",2166.44],["Feb 2025",2208.37],["Mar 2025",2759.18],["Apr 2025",2327.5],["May 2025",2502.21],["Jun 2025",2534.14],["Jul 2025",2932.16],["Aug 2025",2864.97],["Sep 2025",2439.16],["Oct 2025",2265.78],["Nov 2025",2187.59],["Dec 2025",1682.62],["Jan 2026",1709.13],["Feb 2026",1350.85],["Mar 2026",1382.88],["Apr 2026",1295.59],["May 2026",1337.27],["Jun 2026",1381.63],["Jul 2026",1411.98],["Aug 2026",1417.09],["Sep 2026",1425.36],["Oct 2026",1275.22],["Nov 2026",301.48]]};
@@ -167,14 +171,15 @@ const COHORTS={
   "Impact Accelerator":"Program",
   "SE for All":"Clean Energy",
   "Yarandu":"Water","U of Illinois":"Water","U of Sharjah":"Water",
-  "C 40":"Cities","Janaagraha":"Cities","Kota Kita":"Cities","MGB":"Cities","WFP USA":"Cities",
+  "C 40":"Resilient Cities","Janaagraha":"Resilient Cities","Kota Kita":"Resilient Cities","MGB":"Resilient Cities","WFP USA":"Resilient Cities",
   "Al Baha":"Supply Chain","Polytechnique":"Supply Chain","NLR Foundation":"Supply Chain","UNIDO":"Supply Chain","WRI":"Supply Chain"
 };
-const COHORT_COLORS={"Program":"#9b1c3a","Clean Energy":"#7d8c1c","Water":"#5b8fa8","Cities":"#1a4a45","Supply Chain":"#7c3aed"};
-const COHORT_ORDER=["Program","Clean Energy","Water","Cities","Supply Chain"];
+const COHORT_COLORS={"Program":"#9b1c3a","Clean Energy":"#7d8c1c","Water":"#5b8fa8","Resilient Cities":"#1a4a45","Supply Chain":"#7c3aed"};
+const COHORT_ORDER=["Program","Clean Energy","Water","Resilient Cities","Supply Chain"];
 
 let selected=PROJECTS[0];
 let currentView='all';
+let activeCohort='all';
 const fmt=n=>"\$"+n.toLocaleString("en-US",{minimumFractionDigits:2,maximumFractionDigits:2});
 const fmtS=n=>n>=1000?"\$"+(n/1000).toFixed(1)+"k":"\$"+Math.round(n);
 const pct=(u,t)=>t>0?Math.round(u/t*100):0;
@@ -212,6 +217,37 @@ function makeCard({project,initial,remainingCurrent,remainingNext}){
   return card;
 }
 
+function buildCohortFilters(){
+  const bar=document.getElementById("cohortFilters");
+  bar.innerHTML='';
+  // "All" pill
+  const allBtn=document.createElement("button");
+  allBtn.className="cohort-filter-btn active";
+  allBtn.style.background="#1F4E79";
+  allBtn.textContent="All Cohorts";
+  allBtn.dataset.cohort="all";
+  allBtn.onclick=()=>filterCohort("all");
+  bar.appendChild(allBtn);
+  COHORT_ORDER.forEach(cohort=>{
+    const cc=COHORT_COLORS[cohort]||'#57606a';
+    const btn=document.createElement("button");
+    btn.className="cohort-filter-btn";
+    btn.style.background=cc;
+    btn.textContent=cohort;
+    btn.dataset.cohort=cohort;
+    btn.onclick=()=>filterCohort(cohort);
+    bar.appendChild(btn);
+  });
+}
+
+function filterCohort(cohort){
+  activeCohort=cohort;
+  document.querySelectorAll(".cohort-filter-btn").forEach(b=>{
+    b.classList.toggle("active",b.dataset.cohort===cohort);
+  });
+  buildCards();
+}
+
 function buildCards(){
   const wrap=document.getElementById("creditCards");
   wrap.innerHTML='';
@@ -221,8 +257,9 @@ function buildCards(){
     CREDITS.forEach(cr=>grid.appendChild(makeCard(cr)));
     wrap.appendChild(grid);
   } else {
-    COHORT_ORDER.forEach(cohort=>{
-      const members=CREDITS.filter(cr=>(COHORTS[cr.project]||'')=== cohort);
+    const cohortsToShow=activeCohort==='all'?COHORT_ORDER:[activeCohort];
+    cohortsToShow.forEach(cohort=>{
+      const members=CREDITS.filter(cr=>(COHORTS[cr.project]||'')===cohort);
       if(!members.length) return;
       const cc=COHORT_COLORS[cohort]||'#57606a';
       const group=document.createElement("div");
@@ -243,8 +280,12 @@ function buildCards(){
 
 function setView(v){
   currentView=v;
+  activeCohort='all';
   document.getElementById("btnAll").classList.toggle("active",v==='all');
   document.getElementById("btnCohort").classList.toggle("active",v==='cohort');
+  const filtersBar=document.getElementById("cohortFilters");
+  filtersBar.style.display=v==='cohort'?'flex':'none';
+  if(v==='cohort') buildCohortFilters();
   buildCards();
 }
 
